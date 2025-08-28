@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Factrick Cheat</title>
+<style>
+  :root{
+    --morado:#a020f0;
+    --verde:#00ff9d;
+    --bg1:#0a0f1a;
+    --bg2:#1e0029;
+    --panel:#1a1e32;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,Arial,system-ui,-apple-system,Segoe UI,Roboto;
+    background: radial-gradient(1200px 600px at 20% -10%, rgba(160,32,240,.25), transparent 60%),
+                radial-gradient(1200px 600px at 80% 110%, rgba(0,255,157,.15), transparent 60%),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:#fff;
+  }
+  header{ text-align:center; padding:26px 16px 6px; }
+  header .factrick{ color:var(--morado); font-weight:900; font-size:30px; text-shadow:0 0 14px var(--morado) }
+  header .cheat{ color:var(--verde); font-weight:900; font-size:30px; text-shadow:0 0 14px var(--verde) }
+  .subheader{ text-align:center; opacity:.9; margin-bottom:8px }
+
+  /* productos */
+  .productos{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); padding:22px; }
+  .card{ background:linear-gradient(180deg,#141832,#0f1226); border-radius:14px; padding:14px; box-shadow:0 12px 40px rgba(0,0,0,.45); transition:.2s; }
+  .card:hover{ transform:translateY(-6px); box-shadow:0 30px 80px rgba(0,0,0,.6) }
+  .card h4{ margin:0 0 6px; color:var(--verde); font-size:18px; font-weight:900 }
+  .card p{ margin:0 0 10px; opacity:.85; font-size:14px }
+  .price{ font-weight:900; color:var(--verde); font-size:20px; margin-bottom:10px; text-shadow:0 0 8px var(--verde) }
+  .actions{ display:flex; gap:8px }
+  .btn{ border:0; border-radius:10px; padding:10px 12px; font-weight:800; cursor:pointer; transition:.12s transform }
+  .btn:active{ transform:translateY(1px) }
+  .btn-primary{ background:var(--verde); color:#071018; box-shadow:0 0 18px rgba(0,255,157,.25) }
+  .btn-ghost{ background:#19202f; color:#fff; border:1px solid rgba(255,255,255,.04) }
+
+  /* overlay + modales */
+  .overlay{ position:fixed; inset:0; background:rgba(3,6,12,.6); backdrop-filter:blur(4px); display:none; z-index:50 }
+  .overlay.open{ display:block }
+  .modal{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; padding:18px; z-index:60; display:none }
+  .modal.open{ display:flex }
+  .panel{ width:min(720px,96vw); background:var(--panel); border-radius:16px; padding:18px; box-shadow:0 20px 80px rgba(0,0,0,.6); position:relative }
+  .panel h3{ margin:0 0 10px }
+  .close{ position:absolute; right:12px; top:10px; width:36px; height:36px; border-radius:10px; border:0; background:#222; color:#fff; font-weight:800; cursor:pointer }
+  .close:hover{ background:#333 }
+  .chips{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin:12px 0; }
+  .chip{ padding:12px; border-radius:12px; background:#141726; cursor:pointer; text-align:center; font-weight:900; border:1px solid rgba(160,32,240,.18) }
+  .chip.selected{ border-color:var(--verde); box-shadow:0 0 20px rgba(0,255,157,.15) }
+  .logos{ display:flex; gap:14px; justify-content:center; align-items:center; margin:12px 0 }
+  .logos img{ width:110px; height:110px; object-fit:contain; background:#0f1322; border-radius:12px; padding:10px; cursor:pointer; border:2px solid transparent }
+  .logos img.selected{ border-color:var(--verde); box-shadow:0 0 22px rgba(0,255,157,.18) }
+  .uploader{ display:flex; flex-direction:column; gap:8px; margin:8px 0 }
+  input[type="file"]{ background:#0f1322; border-radius:10px; padding:8px; color:#fff; border:1px solid rgba(255,255,255,.06) }
+  .muted{ opacity:.85; font-size:13px }
+  .row-right{ display:flex; justify-content:flex-end; gap:10px; margin-top:12px }
+
+  /* welcome modal */
+  .country-row{ display:flex; gap:12px; justify-content:center; margin-top:12px }
+  .country-btn{ padding:12px 16px; border-radius:12px; border:0; cursor:pointer; font-weight:900 }
+  .country-col{ background:#fff; color:#071018; border-radius:12px; padding:10px 14px }
+  .country-us{ background:#071018; color:#fff; border-radius:12px; padding:10px 14px; border:2px solid rgba(160,32,240,.18) }
+
+  /* small */
+  @media (max-width:520px){
+    .logos img{ width:86px; height:86px }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="factrick">Factrick</span> <span class="cheat">Cheat</span>
+</header>
+<p class="subheader">Compra fácil — Productos para iPhone y Android — 100% sin baneo</p>
+
+<section class="productos" id="productosGrid">
+  <!-- Cards (se usan como demo; el flujo real arranca desde "Comprar Ahora" que abre el modal de productos) -->
+  <div class="card">
+    <h4>DRIP CLIENT</h4>
+    <p>Funciones: Aim, ESP, Speed, Teleport. Para iPhone & Android.</p>
+    <div class="price" id="price-drip">--</div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="openProductModal('DRIP CLIENT')">Comprar ahora</button>
+      <button class="btn btn-ghost" onclick="verDetalles('DRIP CLIENT','DRIP CLIENT — versión estable. Soporta iPhone y Android, 100% sin baneo')">Detalles</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>HG CHEAT</h4>
+    <p>Funciones: Aimbot, Anti-ban, Actualizaciones automáticas.</p>
+    <div class="price" id="price-hg">--</div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="openProductModal('HG CHEAT')">Comprar ahora</button>
+      <button class="btn btn-ghost" onclick="verDetalles('HG CHEAT','HG CHEAT — potente y estable. iPhone y Android')">Detalles</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>BR MODS</h4>
+    <p>Paquete completo de mods y ajustes para rendimiento y ventajas.</p>
+    <div class="price" id="price-br">--</div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="openProductModal('BR MODS')">Comprar ahora</button>
+      <button class="btn btn-ghost" onclick="verDetalles('BR MODS','BR MODS — paquete premium. iPhone & Android, 100% sin baneo')">Detalles</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>HG CHEAT NO ROOT</h4>
+    <p>Versión sin root, fácil instalación y bajo riesgo.</p>
+    <div class="price" id="price-no-root">--</div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="openProductModal('HG CHEAT NO ROOT')">Comprar ahora</button>
+      <button class="btn btn-ghost" onclick="verDetalles('HG CHEAT NO ROOT','HG CHEAT NO ROOT — no requiere root, iPhone & Android')">Detalles</button>
+    </div>
+  </div>
+</section>
+
+<!-- overlay -->
+<div id="overlay" class="overlay"></div>
+
+<!-- MODAL: WELCOME / SELECT COUNTRY (appears on page load) -->
+<div id="modalWelcome" class="modal open">
+  <div class="panel">
+    <h3>Bienvenido — Elige tu país</h3>
+    <p class="muted" style="text-align:center">Selecciona tu país para mostrar precios y métodos adecuados.</p>
+    <div class="country-row" style="margin-top:12px">
+      <button class="country-btn country-col" onclick="selectCountry('CO')">Colombia 🇨🇴 (COP)</button>
+      <button class="country-btn country-us" onclick="selectCountry('US')">Estados Unidos 🇺🇸 (USD)</button>
+    </div>
+    <div style="text-align:center; margin-top:12px">
+      <button class="btn btn-ghost" onclick="closeWelcome()">Continuar sin elegir</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 1: SELECT PRODUCT -->
+<div id="modalProducts" class="modal" aria-hidden="true">
+  <div class="panel">
+    <button class="close" onclick="closeAll()">✕</button>
+    <h3>Selecciona tu producto</h3>
+    <div class="chips" id="chipsProducts">
+      <div class="chip" onclick="selectProduct(this,'BR MODS')">BR MODS<br><small id="chip-br" style="opacity:.85"></small></div>
+      <div class="chip" onclick="selectProduct(this,'DRIP CLIENT')">DRIP CLIENT<br><small id="chip-drip" style="opacity:.85"></small></div>
+      <div class="chip" onclick="selectProduct(this,'HG CHEAT')">HG CHEAT<br><small id="chip-hg" style="opacity:.85"></small></div>
+      <div class="chip" onclick="selectProduct(this,'HG CHEAT NO ROOT')">HG CHEAT NO ROOT<br><small id="chip-no-root" style="opacity:.85"></small></div>
+    </div>
+    <p style="text-align:center; margin-top:8px"><b>Factrick Cheat</b> – Productos para iPhone y Android, 100% sin baneo</p>
+    <div class="row-right">
+      <button class="btn btn-ghost" onclick="closeAll()">Cancelar</button>
+      <button class="btn btn-primary" id="btnProductsNext" onclick="goPayment()" disabled>Continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2: SELECT PAYMENT -->
+<div id="modalPayment" class="modal" aria-hidden="true">
+  <div class="panel">
+    <button class="close" onclick="closeAll()">✕</button>
+    <h3>Método de pago</h3>
+    <p class="muted" style="text-align:center">Selecciona un método y revisa los datos para enviar el comprobante</p>
+    <div class="logos">
+      <div style="text-align:center">
+        <img src="nequi.jpg" id="optNequi" alt="Nequi" onclick="selectPayment('Nequi',this)" />
+        <div style="margin-top:6px; font-weight:800">Nequi</div>
+        <div class="muted">Número: <b>3180023199</b></div>
+      </div>
+      <div style="text-align:center">
+        <img src="paypal.png" id="optPaypal" alt="PayPal" onclick="selectPayment('PayPal',this)" />
+        <div style="margin-top:6px; font-weight:800">PayPal</div>
+        <div class="muted">Cuenta: <b>samuelanyiver@gmail.com</b></div>
+      </div>
+    </div>
+    <div class="row-right">
+      <button class="btn btn-ghost" onclick="backToProducts()">Atrás</button>
+      <button class="btn btn-primary" id="btnPaymentNext" onclick="goReceipt()" disabled>Continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 3: UPLOAD RECEIPT -->
+<div id="modalReceipt" class="modal" aria-hidden="true">
+  <div class="panel">
+    <button class="close" onclick="closeAll()">✕</button>
+    <h3>Sube tu comprobante</h3>
+    <p class="muted">Aceptamos imagen o PDF. Tamaño recomendado &lt; 5MB.</p>
+    <div class="uploader">
+      <input type="file" id="fileInput" accept="image/*,application/pdf" />
+    </div>
+    <div class="row-right">
+      <button class="btn btn-ghost" onclick="backToPayment()">Atrás</button>
+      <button class="btn btn-primary" onclick="sendToWhatsApp()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== CONFIG =====
+  const WHATSAPP_NUMBER = "573180023199"; // wa.me/57 + 3180023199
+  const NEQUI_NUMBER = "3180023199";
+  const PAYPAL_ACCOUNT = "samuelanyiver@gmail.com";
+
+  // Prices
+  const PRICE_TABLE = {
+    CO: { // COP
+      "DRIP CLIENT": 50000,
+      "HG CHEAT": 70000,
+      "BR MODS": 80000,
+      "HG CHEAT NO ROOT": 60000
+    },
+    US: { // USD
+      "DRIP CLIENT": 25,
+      "HG CHEAT": 28,
+      "BR MODS": 30,
+      "HG CHEAT NO ROOT": 20
+    }
+  };
+
+  // State
+  let selectedCountry = null; // 'CO' or 'US'
+  let selectedProduct = "";
+  let selectedPayment = "";
+
+  // Modals / overlay
+  const overlay = document.getElementById('overlay');
+  const modalWelcome = document.getElementById('modalWelcome');
+  const modalProducts = document.getElementById('modalProducts');
+  const modalPayment = document.getElementById('modalPayment');
+  const modalReceipt = document.getElementById('modalReceipt');
+
+  // Price elements
+  const elPriceDrip = document.getElementById('price-drip');
+  const elPriceHG = document.getElementById('price-hg');
+  const elPriceBR = document.getElementById('price-br');
+  const elPriceNoRoot = document.getElementById('price-no-root');
+
+  // chips small labels
+  const chipDrip = document.getElementById('chip-drip');
+  const chipHG = document.getElementById('chip-hg');
+  const chipBR = document.getElementById('chip-br');
+  const chipNoRoot = document.getElementById('chip-no-root');
+
+  // buttons
+  const btnProductsNext = document.getElementById('btnProductsNext');
+  const btnPaymentNext = document.getElementById('btnPaymentNext');
+
+  // === UTIL: formatters ===
+  function formatCOP(n){
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+  function formatUSD(n){
+    return "$" + Number(n).toFixed(2);
+  }
+
+  // === Country selection ===
+  function selectCountry(code){
+    selectedCountry = code;
+    // Update visible prices
+    updatePrices();
+    closeWelcome();
+  }
+  function closeWelcome(){
+    modalWelcome.classList.remove('open');
+    overlay.classList.remove('open');
+    // show page content (we keep everything visible)
+  }
+
+  // Update price labels based on country
+  function updatePrices(){
+    if(!selectedCountry) return;
+    if(selectedCountry === 'CO'){
+      elPriceDrip.textContent = formatCOP(PRICE_TABLE.CO["DRIP CLIENT"]) + " COP";
+      elPriceHG.textContent = formatCOP(PRICE_TABLE.CO["HG CHEAT"]) + " COP";
+      elPriceBR.textContent = formatCOP(PRICE_TABLE.CO["BR MODS"]) + " COP";
+      elPriceNoRoot.textContent = formatCOP(PRICE_TABLE.CO["HG CHEAT NO ROOT"]) + " COP";
+
+      chipDrip.textContent = formatCOP(PRICE_TABLE.CO["DRIP CLIENT"]) + " COP";
+      chipHG.textContent = formatCOP(PRICE_TABLE.CO["HG CHEAT"]) + " COP";
+      chipBR.textContent = formatCOP(PRICE_TABLE.CO["BR MODS"]) + " COP";
+      chipNoRoot.textContent = formatCOP(PRICE_TABLE.CO["HG CHEAT NO ROOT"]) + " COP";
+    } else {
+      elPriceDrip.textContent = formatUSD(PRICE_TABLE.US["DRIP CLIENT"]);
+      elPriceHG.textContent = formatUSD(PRICE_TABLE.US["HG CHEAT"]);
+      elPriceBR.textContent = formatUSD(PRICE_TABLE.US["BR MODS"]);
+      elPriceNoRoot.textContent = formatUSD(PRICE_TABLE.US["HG CHEAT NO ROOT"]);
+
+      chipDrip.textContent = formatUSD(PRICE_TABLE.US["DRIP CLIENT"]);
+      chipHG.textContent = formatUSD(PRICE_TABLE.US["HG CHEAT"]);
+      chipBR.textContent = formatUSD(PRICE_TABLE.US["BR MODS"]);
+      chipNoRoot.textContent = formatUSD(PRICE_TABLE.US["HG CHEAT NO ROOT"]);
+    }
+  }
+
+  // === Modal helpers ===
+  function openModal(modal){
+    overlay.classList.add('open');
+    modal.classList.add('open');
+  }
+  function closeAll(){
+    overlay.classList.remove('open');
+    [modalProducts, modalPayment, modalReceipt].forEach(m=>m.classList.remove('open'));
+  }
+
+  // Show product modal (also allows opening directly from a card)
+  function openProductModal(productName){
+    if(productName){ // also preselect if clicked from card
+      // select the matching chip visually
+      const chips = document.querySelectorAll('#modalProducts .chip');
+      chips.forEach(c=>c.classList.remove('selected'));
+      const found = Array.from(chips).find(c => c.textContent.trim().startsWith(productName));
+      if(found) found.classList.add('selected');
+      selectedProduct = productName;
+      btnProductsNext.disabled = false;
+    }
+    openModal(modalProducts);
+  }
+
+  function selectProduct(node, name){
+    document.querySelectorAll('#modalProducts .chip').forEach(c=>c.classList.remove('selected'));
+    node.classList.add('selected');
+    selectedProduct = name;
+    btnProductsNext.disabled = false;
+  }
+
+  function goPayment(){
+    if(!selectedProduct){ alert("Selecciona un producto"); return; }
+    // open payment modal
+    document.querySelectorAll('#modalPayment .logos img').forEach(i=>i.classList.remove('selected'));
+    selectedPayment = "";
+    btnPaymentNext.disabled = true;
+    openModal(modalPayment);
+  }
+
+  function backToProducts(){
+    openModal(modalProducts);
+  }
+  function selectPayment(method, imgEl){
+    selectedPayment = method;
+    document.querySelectorAll('#modalPayment .logos img').forEach(i=>i.classList.remove('selected'));
+    imgEl.classList.add('selected');
+    btnPaymentNext.disabled = false;
+  }
+  function goReceipt(){
+    if(!selectedPayment){ alert("Selecciona un método de pago"); return; }
+    openModal(modalReceipt);
+  }
+  function backToPayment(){
+    openModal(modalPayment);
+  }
+
+  function verDetalles(title, text){
+    alert(title + "\n\n" + text);
+  }
+
+  // ====== Upload & WhatsApp sending ======
+  async function sendToWhatsApp(){
+    const file = document.getElementById('fileInput').files[0];
+    if(!selectedCountry){ alert("Selecciona tu país primero."); openWelcome(); return; }
+    if(!selectedProduct){ alert("Selecciona un producto."); openProductModal(); return; }
+    if(!selectedPayment){ alert("Selecciona un método de pago."); openModal(modalPayment); return; }
+    if(!file){ alert("Sube el comprobante de pago."); return; }
+
+    try {
+      // show a simple loading (alert for now)
+      // 1) upload to server -> get public URL
+      const fileUrl = await uploadReceipt(file); // implementa /api/upload en producción
+
+      // 2) build message
+      const countryName = (selectedCountry === 'CO') ? 'Colombia' : 'Estados Unidos';
+      const msg = `Hola Factrick Cheat 👋%0AHe comprado: ${selectedProduct}%0APaís: ${countryName}%0AMétodo de pago: ${selectedPayment}%0AComprobante: ${fileUrl}`;
+
+      const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      // open WhatsApp in new tab
+      window.open(waLink, '_blank');
+
+      // close modals
+      closeAll();
+      alert("Se abrió WhatsApp con el mensaje. Si usas el link de prueba (DataURL), el receptor verá el enlace al comprobante o una vista previa según WhatsApp.");
+    } catch(err){
+      console.error(err);
+      alert("Error subiendo el comprobante. Revisa la consola.");
+    }
+  }
+
+  // Simulación / placeholder de subida:
+  // EN PRODUCCIÓN reemplaza por: fetch('/api/upload', { method:'POST', body: formData }) -> recibir { url: 'https://...' }
+  function uploadReceipt(file){
+    return new Promise((resolve, reject) => {
+      // Intentaremos subir a /api/upload si existe; si no, fallback a DataURL
+      // Primero intentamos con fetch a /api/upload
+      try {
+        const form = new FormData();
+        form.append('file', file);
+
+        // Intenta subir al endpoint real (ajusta la URL a la tuya)
+        fetch('/api/upload', { method:'POST', body: form })
+          .then(r => {
+            if(!r.ok) throw new Error('no-upload');
+            return r.json();
+          })
+          .then(json => {
+            if(json && json.url) resolve(json.url);
+            else throw new Error('no-url');
+          })
+          .catch(() => {
+            // Fallback - DataURL (solo para pruebas, NO accesible públicamente fuera del dispositivo del usuario)
+            const reader = new FileReader();
+            reader.onload = () => {
+              // DataURL (cadena larga). Whatsapp/wa.me con text=... puede incluirla, pero algunos clientes no aceptan DataURL como "file".
+              // Es solo para pruebas. En producción necesitas la URL pública real.
+              resolve(reader.result);
+            };
+            reader.onerror = () => reject(new Error('file-read-error'));
+            reader.readAsDataURL(file);
+          });
+      } catch(e){
+        reject(e);
+      }
+    });
+  }
+
+  // open welcome if needed
+  function openWelcome(){ modalWelcome.classList.add('open'); overlay.classList.add('open'); }
+  // initialize
+  (function init(){
+    // show welcome modal on load (already shown by default). If you want only once per session, use localStorage.
+    modalWelcome.classList.add('open');
+    overlay.classList.add('open');
+
+    // set default country to CO (optional)
+    // selectedCountry = 'CO';
+    // updatePrices();
+
+    // overlay click closes all (except welcome - keep welcome separate): clicking overlay closes active non-welcome modals
+    overlay.addEventListener('click', () => {
+      // if welcome open, don't close from overlay to force country selection; allow continuing
+      if(modalWelcome.classList.contains('open')) {
+        // do nothing or close welcome allowing continue
+        // closeWelcome();
+      } else {
+        closeAll();
+      }
+    });
+  })();
+
+</script>
+</body>
+</html>
