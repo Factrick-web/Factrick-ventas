@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tienda Gamer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0a0f1a, #1e0029);
+      color: #fff;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #00ff9d;
+      text-shadow: 0 0 15px #00ff9d;
+    }
+    .productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      padding: 30px;
+    }
+    .card {
+      background: #121526;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0, 255, 157, 0.6);
+    }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 20px;
+    }
+    .titulo {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #00ff9d;
+    }
+    .descripcion {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+    .precio {
+      font-size: 22px;
+      font-weight: bold;
+      color: #00ff9d;
+      text-shadow: 0 0 10px #00ff9d;
+      margin-bottom: 15px;
+    }
+    .botones {
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .comprar {
+      background: #00ff9d;
+      color: #000;
+    }
+    .comprar:hover {
+      background: #00cc7a;
+    }
+    .detalles {
+      background: #222;
+      color: #fff;
+    }
+    .detalles:hover {
+      background: #444;
+    }
+
+    /* Pago */
+    .pago-opciones, .subir-comprobante {
+      display: none;
+      text-align: center;
+      background: #1c1c2b;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255,0,0,0.3);
+    }
+    .logos img {
+      width: 100px;
+      margin: 15px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+    .logos img:hover {
+      transform: scale(1.1);
+    }
+    .logos img.selected {
+      border: 2px solid #00ff9d;
+      box-shadow: 0 0 15px #00ff9d;
+    }
+  </style>
+</head>
+<body>
+
+<header>🎮 Tienda Gamer Oficial 🎮</header>
+
+<section class="productos">
+  <!-- Producto 1 -->
+  <div class="card">
+    <img src="https://i.ibb.co/nDPVwQ5/gamer1.jpg" alt="Juego 1">
+    <div class="card-content">
+      <div class="titulo">Drip Mobile 15 Días</div>
+      <div class="descripcion">AlmKill, Aimbot, Speed, ESP, Teleport, etc.</div>
+      <div class="precio">$4.00</div>
+      <div class="botones">
+        <button class="btn comprar" onclick="comprarProducto()">Comprar</button>
+        <button class="btn detalles" onclick="verDetalles('Drip Mobile 15 Días', 'Pack completo por 15 días')">Detalles</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Producto 2 -->
+  <div class="card">
+    <img src="https://i.ibb.co/Y8QyrWZ/gamer2.jpg" alt="Juego 2">
+    <div class="card-content">
+      <div class="titulo">Drip Mobile 1 Día</div>
+      <div class="descripcion">Funciona: Aim, ESP, Speed, Teleport, etc.</div>
+      <div class="precio">$0.60</div>
+      <div class="botones">
+        <button class="btn comprar" onclick="comprarProducto()">Comprar</button>
+        <button class="btn detalles" onclick="verDetalles('Drip Mobile 1 Día', 'Pack básico por 1 día')">Detalles</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Opciones de pago -->
+<div class="pago-opciones" id="pagoOpciones">
+  <h3>Selecciona tu método de pago:</h3>
+  <div class="logos">
+    <img src="nequi.jpg" id="nequi" onclick="seleccionarPago('Nequi')">
+    <img src="paypal.png" id="paypal" onclick="seleccionarPago('PayPal')">
+  </div>
+</div>
+
+<!-- Subir comprobante -->
+<div class="subir-comprobante" id="subirComprobante">
+  <h3>Sube tu comprobante de pago:</h3>
+  <input type="file" id="archivoComprobante" accept="image/*,application/pdf">
+  <br><br>
+  <button class="btn comprar" onclick="enviarComprobante()">Enviar</button>
+</div>
+
+<script>
+  function verDetalles(nombre, descripcion) {
+    alert("Detalles de " + nombre + ":\n\n" + descripcion);
+  }
+
+  function comprarProducto() {
+    document.getElementById('pagoOpciones').style.display = 'block';
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  let metodoSeleccionado = "";
+
+  function seleccionarPago(metodo) {
+    metodoSeleccionado = metodo;
+    document.getElementById('subirComprobante').style.display = 'block';
+
+    document.querySelectorAll('.logos img').forEach(img => img.classList.remove('selected'));
+    document.getElementById(metodo.toLowerCase()).classList.add('selected');
+  }
+
+  function enviarComprobante() {
+    const archivo = document.getElementById('archivoComprobante').files[0];
+    if (!archivo) {
+      alert("⚠️ Por favor sube un comprobante.");
+      return;
+    }
+    alert("✅ Tu comprobante se envió al gerente.\nMétodo: " + metodoSeleccionado);
+    // Aquí conectamos al backend con PHP/Node para enviar al correo del gerente
+  }
+</script>
+
+</body>
+</html>
